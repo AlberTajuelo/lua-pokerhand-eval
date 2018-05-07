@@ -1,23 +1,68 @@
-Poker Hand Evaluator
-====================
+# PokerHand-eval
 
-In pure Lua
+[![Build Status](https://travis-ci.org/AlberTajuelo/pokerhand-eval.svg)](https://travis-ci.org/AlberTajuelo/pokerhand-eval)
+[![codecov](https://codecov.io/gh/AlberTajuelo/pokerhand-eval/branch/master/graph/badge.svg)](https://codecov.io/gh/AlberTajuelo/pokerhand-eval)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 
-27 April 2015, Ivan Ribeiro Rocha
+Poker Texas Hold'em Hand Evaluator using pure Lua.
 
-Introduction
-------------
+## Contents
 
-This is a pure Lua library to calculate the rank of the best [Texas Holdem]
-hand out of 5, 6, or 7 cards. It does not run the board for you, or
-calculate winning percentage, EV, or anything like that. But if you give
-it two hands and the same board, you will be able to tell which hand
-wins.
+* [Overview](#overview)
+* [Origin](#origin)
+* [Requirements](#requirements)
+* [Basic Usage](#basic-usage)
+* [Documentation](#documentation)
+* [Development](#development)
+* [References](#references)
 
-This is a Lua port from the python library: https://github.com/aliang/pokerhand-eval
+## Overview
 
-Quick Start
------------
+This is a pure Lua library to calculate the rank of the best [Texas Holdem] hand out of 5, 6, or 7 cards. It does not run the board for you, or calculate winning percentage, EV, or anything like that. But if you give it two hands and the same board, you will be able to tell which hand wins.
+
+Also there is a two-card ranking/percentile algorithm (Credit to Zach Wissner-Gross).
+
+This is a Lua port from the [python library](https://github.com/aliang/pokerhand-eval).
+
+## Origin
+
+This repository is based on Ivan Ribeiro (@irr) work: https://github.com/irr/lua-pokerhand-eval
+
+## Requirements
+
+Lua version required: 5.1 or 5.2.
+
+Also, you have to include this libraries:
+* [BitOp-lua](https://github.com/AlberTajuelo/bitop-lua)
+* [Underscore.lua](PENDING)
+
+Simply, just write following commands:
+
+```
+luarocks install bitop-lua
+luarocks install PENDING
+```
+
+## Basic Usage
+
+If using LuaRocks:
+```
+luarocks install pokerhand-eval
+```
+
+Otherwise, download <https://github.com/AlberTajuelo/pokerhand-eval/zipball/master>.
+
+Alternately, if using GIT:
+
+```
+git clone git://github.com/AlberTajuelo/pokerhand-eval.git
+
+cd pokerhand-eval 
+
+luarocks make
+```
+
+Calculate Hand winning percentile without board cards:
 
 ```lua
 
@@ -25,22 +70,66 @@ Quick Start
     lookup = require "holdem.lookup"
     analysis = require "holdem.analysis"
 
-    hole = { card.Card(2, 1), card.Card(2, 2) }
+    hand = { card.Card(2, 1), card.Card(2, 2) }
     board = {}
-    rank, percentile = analysis.evaluate(hole, board)
+    rank, percentile = analysis.evaluate(hand, board)
     print(rank, percentile)
     -- Output: nil	0.52337858220211
-    -- For 2 cards, score will be nil and you must use percentile
+    -- For 2 cards, rank will be nil and you must use percentile
 
-    board = { card.Card(10, 2), card.Card(14, 2), card.Card(13, 2), card.Card(7, 2) }
-    rank, percentile = analysis.evaluate(hole, board)
-    print(rank, percentile)
-    -- Output: 420	0.6792270531401
-    -- ps: less rank is better
 ```
 
-Rank is 2-14 representing 2-A, while suit is 1-4 representing
-spades, hearts, diamonds, clubs.
+Calculate hand winning percentile with three board cards:
+
+```lua
+
+    card = require "holdem.card"
+    lookup = require "holdem.lookup"
+    analysis = require "holdem.analysis"
+
+    hand = { card.Card(2, 1), card.Card(2, 2) }
+    board = { card.Card(10, 2), card.Card(14, 2), card.Card(13, 2), card.Card(7, 2) }
+    rank, percentile = analysis.evaluate(hand, board)
+    print(rank, percentile)
+    -- Output: 420  0.6792270531401
+    -- ps: less rank is better
+
+```
+
+## Documentation
+
+### Card Rank
+
+This table represents given a card rank what index is assigned. Rank is 2-14 representing 2-A (Ace).
+
+| Card Rank | Index |
+|-----------|-------|
+| 2         | 2     |
+| 3         | 3     |
+| 4         | 4     |
+| 5         | 5     |
+| 6         | 6     |
+| 7         | 7     |
+| 8         | 8     |
+| 9         | 9     |
+| 10        | 10    |
+| Jack      | 11    |
+| Queen     | 12    |
+| King      | 13    |
+| Ace       | 14    |
+
+### Card Suit
+
+This table represents given a card suit what index is assigned. Suit is 1-4 representing in given order Spades, Hearts, Diamonds and Clubs.
+
+| Card Suit    | Index |
+|--------------|-------|
+| Spades (♠)   | 1     |
+| Hearts (♥)   | 2     |
+| Diamonds (♦) | 3     |
+| Clubs (♣)    | 4     |
+
+### Card Constructor
 
 The Card constructor accepts two arguments, rank, and suit.
 
@@ -55,26 +144,22 @@ The Card constructor accepts two arguments, rank, and suit.
 
     aceOfSpades = card.Card("AS")
     twoOfDiamonds = card.Card("2D")
+
 ```
 
-Algorithm
----------
+## Development
 
-The algorithm for 5 cards is just a port of this algorithm:
-http://www.suffecool.net/poker/evaluator.html
+PokerHand-eval is currently in development.
 
-1. 6 and 7 card evaluators using a very similar card representation and 
-applying some of the same ideas with prime numbers. The idea was to 
-strike a balance between lookup table size and speed.
+WARNING: Not all corner cases have been tested and documented.
 
-2. There is also a two-card ranking/percentile algorithm that is unrelated
-to the rest and may get cleaned up later. We used it at one point for
-some pre-flop evaluation. Credit to Zach Wissner-Gross for developing
-this.
+## References
 
-3. For Bitwise operators, I chose https://github.com/davidm/lua-bit-numberlua
+The algorithm for 5 cards is just a port of this [algorithm](http://www.suffecool.net/poker/evaluator.html).
 
-4. For map/reduce operations I chose https://github.com/mirven/underscore.lua
+Six and seven card evaluators using a very similar card representation and applying some of the same ideas with prime numbers. The idea was to strike a balance between lookup table size and speed.
 
-[Texas Holdem]: http://en.wikipedia.org/wiki/Texas_hold_%27em
+You can search for more info using following references:
 
+[Texas Holdem](http://en.wikipedia.org/wiki/Texas_hold_%27em)
+[BitOp-lua](https://github.com/AlberTajuelo/bitop-lua)

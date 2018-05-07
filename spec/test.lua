@@ -3,7 +3,6 @@ lookup = require "holdem.lookup"
 analysis = require "holdem.analysis"
 
 hand = { card.Card(2, 1), card.Card(2, 2) }
-board = { card.Card(14, 1), card.Card(14, 2), card.Card(13, 3) }
 
 function d(h, b)
     local n = #h 
@@ -19,8 +18,9 @@ function d(h, b)
     if b then p("board", b) end
 end
 
+board = {}
 d(hand)
-print(analysis.evaluate(hand, {}))
+print(analysis.evaluate(hand, board))
 
 board = { card.Card(10, 2), card.Card(14, 2), card.Card(13, 2)  }
 d(hand, board)
