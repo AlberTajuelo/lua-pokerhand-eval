@@ -102,32 +102,32 @@ Calculate hand winning percentile with three board cards:
 
 This table represents given a card rank what index is assigned. Rank is 2-14 representing 2-A (Ace).
 
-| Card Rank | Index |
-|-----------|-------|
-| 2         | 2     |
-| 3         | 3     |
-| 4         | 4     |
-| 5         | 5     |
-| 6         | 6     |
-| 7         | 7     |
-| 8         | 8     |
-| 9         | 9     |
-| 10        | 10    |
-| Jack      | 11    |
-| Queen     | 12    |
-| King      | 13    |
-| Ace       | 14    |
+| Card Rank | Index | Symbol |
+|-----------|-------|--------|
+| 2         | 2     | 2      |
+| 3         | 3     | 3      |
+| 4         | 4     | 4      |
+| 5         | 5     | 5      |
+| 6         | 6     | 6      |
+| 7         | 7     | 7      |
+| 8         | 8     | 8      |
+| 9         | 9     | 9      |
+| 10        | 10    | T      |
+| Jack      | 11    | J      |
+| Queen     | 12    | Q      |
+| King      | 13    | K      |
+| Ace       | 14    | A      |
 
 ### Card Suit
 
 This table represents given a card suit what index is assigned. Suit is 1-4 representing in given order Spades, Hearts, Diamonds and Clubs.
 
-| Card Suit    | Index |
-|--------------|-------|
-| Spades (♠)   | 1     |
-| Hearts (♥)   | 2     |
-| Diamonds (♦) | 3     |
-| Clubs (♣)    | 4     |
+| Card Suit    | Index | Symbol |
+|--------------|-------|--------|
+| Spades (♠)   | 1     | S      |
+| Hearts (♥)   | 2     | H      |
+| Diamonds (♦) | 3     | D      |
+| Clubs (♣)    | 4     | C      |
 
 ### Card Constructor
 
