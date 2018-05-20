@@ -32,17 +32,6 @@ This repository is based on Ivan Ribeiro (@irr) work: https://github.com/irr/lua
 
 Lua version required: 5.1 or 5.2.
 
-Also, you have to include this libraries:
-* [BitOp-lua](https://github.com/AlberTajuelo/bitop-lua)
-* [Underscore.lua](PENDING)
-
-Simply, just write following commands:
-
-```
-luarocks install bitop-lua
-luarocks install PENDING
-```
-
 ## Basic Usage
 
 If using LuaRocks:
@@ -161,5 +150,6 @@ Six and seven card evaluators using a very similar card representation and apply
 
 You can search for more info using following references:
 
-[Texas Holdem](http://en.wikipedia.org/wiki/Texas_hold_%27em)
-[BitOp-lua](https://github.com/AlberTajuelo/bitop-lua)
+* [Texas Holdem](http://en.wikipedia.org/wiki/Texas_hold_%27em)
+* [BitOp-lua](https://github.com/AlberTajuelo/bitop-lua)
+* [underscore-dot-lua](https://github.com/AlberTajuelo/underscore-dot-lua)

@@ -4,7 +4,7 @@ source = {
   url = "git+https://github.com/AlberTajuelo/pokerhand-eval.git"
 }
 description = {
-  summary = "Bitwise operators in pure Lua using Lua numbers",
+  summary = "Poker Texas Hold'em Hand Evaluator using pure Lua",
   detailed = "",
   homepage = "https://github.com/AlberTajuelo/pokerhand-eval.git",
   license = "MIT"
@@ -12,7 +12,7 @@ description = {
 dependencies = {
   "lua >= 5.1, < 5.3",
   "bitop-lua",
-  "underscore.js",
+  "underscore-dot-lua",
 }
 build = {
   type = "builtin",
