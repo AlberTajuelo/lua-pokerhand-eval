@@ -59,7 +59,7 @@ Calculate Hand winning percentile without board cards:
     lookup = require "holdem.lookup"
     analysis = require "holdem.analysis"
 
-    hand = { card.Card(2, 1), card.Card(2, 2) }
+    hand = { Card.new(2, 1), Card.new(2, 2) }
     board = {}
     rank, percentile = analysis.evaluate(hand, board)
     print(rank, percentile)
@@ -76,8 +76,8 @@ Calculate hand winning percentile with three board cards:
     lookup = require "holdem.lookup"
     analysis = require "holdem.analysis"
 
-    hand = { card.Card(2, 1), card.Card(2, 2) }
-    board = { card.Card(10, 2), card.Card(14, 2), card.Card(13, 2), card.Card(7, 2) }
+    hand = { Card.new(2, 1), Card.new(2, 2) }
+    board = { Card.new(10, 2), Card.new(14, 2), Card.new(13, 2), Card.new(7, 2) }
     rank, percentile = analysis.evaluate(hand, board)
     print(rank, percentile)
     -- Output: 420  0.6792270531401
