@@ -5,7 +5,7 @@ local __ = require "underscore"
 
 local ok, bit = pcall(require, "bit")
 if not ok then
-  bit = require 'bit.numberlua'.bit
+  bit = require 'bitop.funcs'.bit
 end
 
 local error = error

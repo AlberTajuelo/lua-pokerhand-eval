@@ -2,7 +2,7 @@ local Card = require "holdem.card"
 
 local ok, bit = pcall(require, "bit")
 if not ok then
-    bit = require 'bit.numberlua'.bit
+    bit = require 'bitop.funcs'.bit
 end
 
 local Lookup = {}
