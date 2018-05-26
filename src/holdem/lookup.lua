@@ -1,54 +1,52 @@
-local card = require "holdem.card"
+local Card = require "holdem.card"
 
 local ok, bit = pcall(require, "bit")
 if not ok then
     bit = require 'bit.numberlua'.bit
 end
 
+local Lookup = {}
+
 local setmetatable = setmetatable
 
-module('holdem.lookup')
-
-_VERSION = '0.01'
-
-PopCountTable16 = {}
+Lookup.PopCountTable16 = {}
 
 local n = 2 ^ 16 - 1
 for i = 0, n do
-    PopCountTable16[i] = 0
+    Lookup.PopCountTable16[i] = 0
 end
 
 for i = 0, n do
-    PopCountTable16[i] = bit.band(i, 1) + PopCountTable16[bit.rshift(i, 1)]
+    Lookup.PopCountTable16[i] = bit.band(i, 1) + Lookup.PopCountTable16[bit.rshift(i, 1)]
 end
 
-setmetatable(PopCountTable16, {
+setmetatable(Lookup.PopCountTable16, {
     __call = function (_, v)
-        return PopCountTable16[bit.band(v, 0xFFFF)] + PopCountTable16[bit.band(bit.rshift(v, 16), 0xFFFF)]
+        return Lookup.PopCountTable16[bit.band(v, 0xFFFF)] + Lookup.PopCountTable16[bit.band(bit.rshift(v, 16), 0xFFFF)]
     end
 })
 
-Tables = {}
+Lookup.Tables = {}
 
-Tables.primes = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41 }
-Tables.deck = {
-        card.Card(2,1), card.Card(2,2), card.Card(2,3), card.Card(2,4),
-        card.Card(3,1), card.Card(3,2), card.Card(3,3), card.Card(3,4),
-        card.Card(4,1), card.Card(4,2), card.Card(4,3), card.Card(4,4),
-        card.Card(5,1), card.Card(5,2), card.Card(5,3), card.Card(5,4),
-        card.Card(6,1), card.Card(6,2), card.Card(6,3), card.Card(6,4),
-        card.Card(7,1), card.Card(7,2), card.Card(7,3), card.Card(7,4),
-        card.Card(8,1), card.Card(8,2), card.Card(8,3), card.Card(8,4),
-        card.Card(9,1), card.Card(9,2), card.Card(9,3), card.Card(9,4),
-        card.Card(10,1), card.Card(10,2), card.Card(10,3), card.Card(10,4),
-        card.Card(11,1), card.Card(11,2), card.Card(11,3), card.Card(11,4),
-        card.Card(12,1), card.Card(12,2), card.Card(12,3), card.Card(12,4),
-        card.Card(13,1), card.Card(13,2), card.Card(13,3), card.Card(13,4),
-        card.Card(14,1), card.Card(14,2), card.Card(14,3), card.Card(14,4)
+Lookup.Tables.primes = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41 }
+Lookup.Tables.deck = {
+        Card.new(2,1), Card.new(2,2), Card.new(2,3), Card.new(2,4),
+        Card.new(3,1), Card.new(3,2), Card.new(3,3), Card.new(3,4),
+        Card.new(4,1), Card.new(4,2), Card.new(4,3), Card.new(4,4),
+        Card.new(5,1), Card.new(5,2), Card.new(5,3), Card.new(5,4),
+        Card.new(6,1), Card.new(6,2), Card.new(6,3), Card.new(6,4),
+        Card.new(7,1), Card.new(7,2), Card.new(7,3), Card.new(7,4),
+        Card.new(8,1), Card.new(8,2), Card.new(8,3), Card.new(8,4),
+        Card.new(9,1), Card.new(9,2), Card.new(9,3), Card.new(9,4),
+        Card.new(10,1), Card.new(10,2), Card.new(10,3), Card.new(10,4),
+        Card.new(11,1), Card.new(11,2), Card.new(11,3), Card.new(11,4),
+        Card.new(12,1), Card.new(12,2), Card.new(12,3), Card.new(12,4),
+        Card.new(13,1), Card.new(13,2), Card.new(13,3), Card.new(13,4),
+        Card.new(14,1), Card.new(14,2), Card.new(14,3), Card.new(14,4)
 }
 
-Tables.Two = {}
-Tables.Two.preflop_order_matrix = {
+Lookup.Tables.Two = {}
+Lookup.Tables.Two.preflop_order_matrix = {
             {87,169,168,166,167,165,159,149,135,121,105,86,59},
             {163,66,164,161,162,160,157,144,131,116,98,80,53},
             {158,150,48,153,154,151,148,140,125,111,93,74,49},
@@ -64,7 +62,7 @@ Tables.Two.preflop_order_matrix = {
             {46,38,35,30,31,24,21,18,13,11,10,8,1}
         }
         
-Tables.Two.preflop_count_matrix = {
+Lookup.Tables.Two.preflop_count_matrix = {
             3,3,3,3,3,3,3,2,3,2,2,6,2,6,6,2,3,2,6,2,
             2,2,6,2,6,6,3,2,2,2,2,6,6,2,2,6,2,2,6,6,
             6,6,2,2,2,2,6,3,6,2,6,2,6,2,2,6,6,6,6,2,
@@ -76,9 +74,9 @@ Tables.Two.preflop_count_matrix = {
             6,6,2,6,6,6,6,6,6
         }
         
-Tables.Two.preflop_count_sum = 663.0
+Lookup.Tables.Two.preflop_count_sum = 663.0
 
-Tables.Two.suited_ranks_to_percentile = {
+Lookup.Tables.Two.suited_ranks_to_percentile = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0.05731523378582204, 0.096530920060331815, 0.11161387631975872, 0.10859728506787325, 0.13273001508295623, 0.19306184012066363, 0.25339366515837103, 0.33785822021116141, 0.42232277526395179, 0.51885369532428349, 0.61387631975867274, 0.76470588235294112, 0},
@@ -96,7 +94,7 @@ Tables.Two.suited_ranks_to_percentile = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         }
         
-Tables.Two.unsuited_ranks_to_percentile = {
+Lookup.Tables.Two.unsuited_ranks_to_percentile = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0.52337858220211153, 0.0090497737556560764, 0.018099547511312264, 0.036199095022624417, 0.02714932126696834, 0.045248868778280493, 0.093514328808446456, 0.15384615384615385, 0.23831070889894423, 0.3227752639517345, 0.41930618401206632, 0.53242835595776772, 0.68174962292609353, 0},
@@ -114,8 +112,8 @@ Tables.Two.unsuited_ranks_to_percentile = {
             {0, 0, 0.68174962292609353, 0.72398190045248867, 0.74811463046757165, 0.79185520361990946, 0.78280542986425339, 0.82503770739064852, 0.8491704374057315, 0.88386123680241324, 0.91402714932126694, 0.93363499245852188, 0.94268476621417796, 0.95475113122171951, 1.0, 0}
         }
         
-Tables.Five = {}
-Tables.Five.card_to_binary = {{}, {},
+Lookup.Tables.Five = {}
+Lookup.Tables.Five.card_to_binary = {{}, {},
             {0, 69634, 73730, 81922, 98306}, 
             {0, 135427, 139523, 147715, 164099},
             {0, 266757, 270853, 279045, 295429},
@@ -131,7 +129,7 @@ Tables.Five.card_to_binary = {{}, {},
             {0, 268442665, 268446761, 268454953, 268471337}
         }
     
-Tables.Five.flushes = {
+Lookup.Tables.Five.flushes = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 1599, 0, 0, 0, 0, 0, 0, 0, 1598, 0, 0, 0, 1597, 0, 1596,
@@ -547,7 +545,7 @@ Tables.Five.flushes = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }
     
-Tables.Five.unique5 = {
+Lookup.Tables.Five.unique5 = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 1608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 7462, 0, 0, 0, 0, 0, 0, 0, 7461, 0, 0,  0,  7460,  0,
@@ -971,7 +969,7 @@ Tables.Five.unique5 = {
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0,  0,  0,  0,  0, 0, 0, 0, 0, 0, 0, 1600 }
 
-Tables.Five.pairs = {
+Lookup.Tables.Five.pairs = {
                 [48]= 166, [72]= 322, [80]= 165, [108]= 310, 
                 [112]= 164, [120]= 2467, [162]= 154, [168]= 2466, 
                 [176]= 163, [180]= 3325, [200]= 321, [208]= 162, 
@@ -2196,7 +2194,7 @@ Tables.Five.pairs = {
                 [85147693]= 179, [87598591]= 12, [94352849]= 167, [104553157]= 11 
             }
 
-Tables.Five.rank_to_percentile_5 = {
+Lookup.Tables.Five.rank_to_percentile_5 = {
             0.999998460922831,0.999996921845661,0.999995382768492,0.999993843691323,
             0.999992304614153,0.999990765536984,0.999989226459815,0.999987687382645,
             0.999986148305476,0.999984609228307,0.999983070151137,0.999981531073968,
@@ -4065,7 +4063,7 @@ Tables.Five.rank_to_percentile_5 = {
             0.000392464678178964,0.0
         }
 
-Tables.Five.rank_to_percentile_6 = {
+Lookup.Tables.Five.rank_to_percentile_6 = {
             0.999990765536984,0.999981727551905,0.999972689566825,0.999963651581746,
             0.999954613596666,0.999945575611587,0.999936537626507,0.999927499641428,
             0.999918461656348,0.999909423671269,0.999900483925158,0.999892330090792,
@@ -5934,7 +5932,7 @@ Tables.Five.rank_to_percentile_6 = {
             0.0,0.0
         }
 
-Tables.Five.rank_to_percentile_7 = {
+Lookup.Tables.Five.rank_to_percentile_7 = {
             0.999967679379444,0.999936734104444,0.999905788829443,0.999874843554443,
             0.999843898279443,0.999812953004442,0.999782007729442,0.999751062454442,
             0.999720117179441,0.999689171904441,0.999658884403402,0.999633739498788,
@@ -7803,8 +7801,8 @@ Tables.Five.rank_to_percentile_7 = {
             0.0,0.0
         }
 
-Tables.Six = {}
-Tables.Six.card_to_binary = {{}, {},
+Lookup.Tables.Six = {}
+Lookup.Tables.Six.card_to_binary = {{}, {},
             {0, 73730, 77826, 86018, 94210},
             {0, 139523, 143619, 151811, 160003},
             {0, 270853, 274949, 283141, 291333},
@@ -7820,7 +7818,7 @@ Tables.Six.card_to_binary = {{}, {},
             {0, 268446761, 268450857, 268459049, 268467241}
         }
 
-Tables.Six.prime_products_to_flush = {
+Lookup.Tables.Six.prime_products_to_flush = {
             -- spades
             [64]= 2, [96]= 2, [160]= 2, [224]= 2,
             -- hearts
@@ -7831,7 +7829,7 @@ Tables.Six.prime_products_to_flush = {
             [33614]=7, [50421]=7, [84035]=7, [117649]=7
         }
 
-Tables.Six.flush_rank_bits_to_rank = {
+Lookup.Tables.Six.flush_rank_bits_to_rank = {
             [31]= 9, [47]= 1599, [55]= 1598, [59]= 1597,
             [61]= 1596, [62]= 8, [63]= 8, [79]= 1595,
             [87]= 1594, [91]= 1593, [93]= 1592, [94]= 1591,
@@ -8586,7 +8584,7 @@ Tables.Six.flush_rank_bits_to_rank = {
         }
 
         
-Tables.Six.prime_products_to_rank = {
+Lookup.Tables.Six.prime_products_to_rank = {
             [279052297]= 1764, [39256075]= 188, [196625]= 295, [208502807]= 240,
             [210829339]= 1640, [40173601]= 84, [163875]= 2308, [120018269]= 1821,
             [3473457]= 2096, [45711419]= 220, [36798535]= 1952, [31359055]= 1662,
@@ -9988,7 +9986,7 @@ Tables.Six.prime_products_to_rank = {
         }
        
    
-Tables.Six.odd_xors_to_rank = {
+Lookup.Tables.Six.odd_xors_to_rank = {
             [3]= 310, [5]= 298, [6]= 297, [9]= 286,
             [10]= 285, [12]= 284, [17]= 274, [18]= 273,
             [20]= 272, [24]= 271, [33]= 262, [34]= 261,
@@ -10441,7 +10439,7 @@ Tables.Six.odd_xors_to_rank = {
         }
 
         
-Tables.Six.even_xors_to_rank = {
+Lookup.Tables.Six.even_xors_to_rank = {
             [3584]= 2601, [3073]= 2610, [1538]= 2730, [1027]= 2819,
             [2114]= 2653, [4101]= 2577, [4102]= 2576, [7]= 3303,
             [1544]= 2728, [4105]= 2566, [4106]= 2565, [11]= 3281,
@@ -10517,7 +10515,7 @@ Tables.Six.even_xors_to_rank = {
         }
 
         
-Tables.Six.even_xors_to_odd_xors_to_rank = {
+Lookup.Tables.Six.even_xors_to_odd_xors_to_rank = {
             [4096]= { [2055]= 3378, [2059]= 3376, [2061]= 3375, [2062]= 3375,
             [15]= 1609, [2067]= 3373, [2069]= 3372, [2070]= 3372,
             [23]= 3539, [2073]= 3371, [2074]= 3371, [27]= 3537,
@@ -13224,8 +13222,8 @@ Tables.Six.even_xors_to_odd_xors_to_rank = {
             [4104]= 2765, [576]= 2767, [4100]= 2765 }
         }
    
-Tables.Seven = {}
-Tables.Seven.card_to_binary = {{}, {},
+Lookup.Tables.Seven = {}
+Lookup.Tables.Seven.card_to_binary = {{}, {},
             {0, 73730, 77826, 86018, 94210},
             {0, 139523, 143619, 151811, 160003},
             {0, 270853, 274949, 283141, 291333},
@@ -13241,7 +13239,7 @@ Tables.Seven.card_to_binary = {{}, {},
             {0, 268446761, 268450857, 268459049, 268467241}
         }
 
-Tables.Seven.prime_products_to_flush = {
+Lookup.Tables.Seven.prime_products_to_flush = {
             [128]= 2, [192]= 2, [288]= 2, [320]= 2, [448]= 2, [480]= 2, [672]= 2, [800]= 2, [1120]= 2, [1568]= 2,
             [972]= 3, [1458]= 3, [2187]= 3, [2430]= 3, [3402]= 3, [3645]= 3, [5103]= 3, [6075]= 3, [8505]= 3, [11907]= 3,
             [12500]= 5, [18750]= 5, [28125]= 5, [31250]= 5, [43750]= 5, [46875]= 5, [65625]= 5, [78125]= 5, [109375]= 5, [153125]= 5,
@@ -13249,7 +13247,7 @@ Tables.Seven.prime_products_to_flush = {
         }
 
 
-Tables.Seven.flush_rank_bits_to_rank = {
+Lookup.Tables.Seven.flush_rank_bits_to_rank = {
             [31]= 9, [47]= 1599, [55]= 1598, [59]= 1597,
             [61]= 1596, [62]= 8, [63]= 8, [79]= 1595,
             [87]= 1594, [91]= 1593, [93]= 1592, [94]= 1591,
@@ -14433,7 +14431,7 @@ Tables.Seven.flush_rank_bits_to_rank = {
         }
 
         
-Tables.Seven.odd_xors_to_rank = {
+Lookup.Tables.Seven.odd_xors_to_rank = {
             [127]= 1606, [191]= 1607, [223]= 1608, [239]= 7414,
             [247]= 7411, [251]= 1605, [253]= 1605, [254]= 1605,
             [319]= 1607, [351]= 1608, [367]= 7380, [375]= 7377,
@@ -14866,7 +14864,7 @@ Tables.Seven.odd_xors_to_rank = {
         }
 
 
-Tables.Seven.prime_products_to_rank = {
+Lookup.Tables.Seven.prime_products_to_rank = {
             [755498227]= 267, [1545408985]= 50, [100723371]= 199, [83787781]= 267,
             [1575258707]= 198, [9407234053]= 1610, [21594125]= 2282, [71663630]= 1896,
             [628097041]= 219, [558104594]= 1764, [9551875]= 133, [78512150]= 188,
@@ -20236,7 +20234,7 @@ Tables.Seven.prime_products_to_rank = {
         }
 
         
-Tables.Seven.even_xors_to_odd_xors_to_rank = {
+Lookup.Tables.Seven.even_xors_to_odd_xors_to_rank = {
             [4096]= { [2048]= 11, [1]= 22, [2]= 21, [4]= 20,
             [8]= 19, [2063]= 1609, [16]= 18, [2071]= 3372,
             [2075]= 3371, [2077]= 3371, [2078]= 3371, [31]= 1608,
@@ -26984,4 +26982,6 @@ Tables.Seven.even_xors_to_odd_xors_to_rank = {
             [2624]= 3052, [1104]= 3053, [1090]= 3053, [2113]= 3052,
             [2096]= 3052, [4176]= 3051, [545]= 3054, [4354]= 3051,
             [84]= 3056 }
-        }
+}
+
+return Lookup
